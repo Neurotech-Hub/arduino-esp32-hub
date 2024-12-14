@@ -31,16 +31,19 @@ def download_core():
 def setup_working_directory():
     """Download and setup original core files in working directory."""
     original_dir = os.path.join(WORKING_DIR, "original")
-    if not os.path.exists(original_dir):
-        print("Setting up working directory with original core files...")
-        temp_dir, zip_path = download_core()
-        try:
-            with zipfile.ZipFile(zip_path, 'r') as zip_ref:
-                zip_ref.extractall(original_dir)
-        finally:
-            shutil.rmtree(temp_dir)
-    else:
-        print("Working directory already exists.")
+    
+    # Always remove existing directory to ensure fresh copy
+    if os.path.exists(original_dir):
+        print("Removing existing working directory...")
+        shutil.rmtree(original_dir)
+    
+    print("Setting up working directory with original core files...")
+    temp_dir, zip_path = download_core()
+    try:
+        with zipfile.ZipFile(zip_path, 'r') as zip_ref:
+            zip_ref.extractall(original_dir)
+    finally:
+        shutil.rmtree(temp_dir)
 
 def create_patches():
     """Create patch files from modified sources."""
