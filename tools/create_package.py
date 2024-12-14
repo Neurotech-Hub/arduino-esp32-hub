@@ -375,8 +375,8 @@ def main():
                 print(f"\nTemp directory preserved for inspection: {temp_dir}")
                 return
                 
-            # finally:
-            #     shutil.rmtree(temp_dir)  # Comment out cleanup for debugging
+            finally:
+                shutil.rmtree(temp_dir)  # Uncomment cleanup
             return
 
 if __name__ == "__main__":
