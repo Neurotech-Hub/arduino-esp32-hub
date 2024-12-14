@@ -10,6 +10,7 @@ import hashlib
 import json
 import datetime
 import fnmatch
+import subprocess
 
 ESP32_CORE_VERSION = "3.0.7"
 ESP32_CORE_URL = f"https://github.com/espressif/arduino-esp32/archive/refs/tags/{ESP32_CORE_VERSION}.zip"
@@ -285,28 +286,40 @@ def main():
     PACKAGE_INDEX = os.path.join(repo_root, "package_esp32hub_index.json")
     WORKING_DIR = os.path.join(repo_root, "working")
     
-    if len(sys.argv) > 1 and sys.argv[1] == "setup":
-        setup_working_directory()
-        return
-    elif len(sys.argv) > 1 and sys.argv[1] == "create-patches":
-        create_patches()
-        return
-    elif len(sys.argv) > 1 and sys.argv[1] == "verify-patches":
-        verify_patches()
-        return
-    
-    temp_dir, zip_path = download_core()
-    try:
-        work_dir = os.path.join(temp_dir, f"arduino-esp32-{ESP32_CORE_VERSION}")
-        with zipfile.ZipFile(zip_path, 'r') as zip_ref:
-            zip_ref.extractall(temp_dir)
-        
-        apply_patches(work_dir)
-        package_file = create_package(work_dir)
-        update_package_index(package_file)
-        
-    finally:
-        shutil.rmtree(temp_dir)
+    if len(sys.argv) > 1:
+        if sys.argv[1] == "setup":
+            setup_working_directory()
+            return
+        elif sys.argv[1] == "create-patches":
+            create_patches()
+            return
+        elif sys.argv[1] == "verify-patches":
+            verify_patches()
+            return
+        elif sys.argv[1] == "release":
+            print("=== Starting Release Process ===")
+            print("\n1. Updating tools dependencies...")
+            result = subprocess.run([sys.executable, os.path.join(os.path.dirname(__file__), "update_tools.py")], 
+                                 check=True)
+            if result.returncode != 0:
+                print("Error updating tools dependencies")
+                sys.exit(1)
+            
+            print("\n2. Creating package...")
+            # Continue with normal package creation
+            temp_dir, zip_path = download_core()
+            try:
+                work_dir = os.path.join(temp_dir, f"arduino-esp32-{ESP32_CORE_VERSION}")
+                with zipfile.ZipFile(zip_path, 'r') as zip_ref:
+                    zip_ref.extractall(temp_dir)
+                
+                apply_patches(work_dir)
+                package_file = create_package(work_dir)
+                update_package_index(package_file)
+                
+            finally:
+                shutil.rmtree(temp_dir)
+            return
 
 if __name__ == "__main__":
     main() 

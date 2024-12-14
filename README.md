@@ -11,6 +11,11 @@ Custom variants and patches for the ESP32 Arduino core, maintained by Neurotech 
 3. Search for "ESP32 Hub"
 4. Install the package
 
+### Development
+1. Ensure cached versions of packages and package_*.json are deleted (e.g., `/Users/mattgaidica/Library/Arduino15`).
+2. Restart Arduino IDE.
+3. Install the ESP32 Hub package from Boards Manager.
+
 ## Development
 
 ### Complete Workflow
@@ -36,9 +41,23 @@ Custom variants and patches for the ESP32 Arduino core, maintained by Neurotech 
    ```
    This creates .patch files in `patches/3.0.7/` by comparing original and modified files
 
-4. Build the package:
+4. Update tools dependencies:
    ```bash
+   # Install required Python package
+   pip install requests
+
+   # Update tool dependencies from ESP32 core
+   python3 tools/update_tools.py
+   ```
+   This fetches and updates the toolsDependencies in package_esp32hub_index.json
+
+5. Build and release:
+   ```bash
+   # Option 1: Build package only
    python3 tools/create_package.py
+
+   # Option 2: Update tools and build package
+   python3 tools/create_package.py release
    ```
    This will:
    - Download a fresh copy of the ESP32 core
@@ -53,7 +72,7 @@ Custom variants and patches for the ESP32 Arduino core, maintained by Neurotech 
    - Upload the generated esp32-hub-3.0.7.zip file
    - Publish release
 
-5. Verify:
+6. Verify:
    - Check that all patches applied successfully
    - Test the package in Arduino IDE
    - Commit and push changes to GitHub
@@ -68,7 +87,8 @@ arduino-esp32-hub/
 │   └── 3.0.7/           # Generated patch files
 ├── package_esp32hub_index.json
 └── tools/
-    └── create_package.py
+    ├── create_package.py # Package creation tool
+    └── update_tools.py   # Tools dependency updater
 ```
 
 ## License
