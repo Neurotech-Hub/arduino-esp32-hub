@@ -13,7 +13,7 @@ import fnmatch
 import subprocess
 
 ESP32_CORE_VERSION = "3.0.7"
-ESP32_CORE_URL = f"https://github.com/espressif/arduino-esp32/archive/refs/tags/{ESP32_CORE_VERSION}.zip"
+ESP32_CORE_URL = f"https://github.com/espressif/arduino-esp32/releases/download/{ESP32_CORE_VERSION}/esp32-{ESP32_CORE_VERSION}.zip"
 PATCH_DIR = f"../patches/{ESP32_CORE_VERSION}"
 PACKAGE_NAME = f"esp32-hub-{ESP32_CORE_VERSION}.zip"
 PACKAGE_INDEX = "../package_esp32hub_index.json"
@@ -306,12 +306,14 @@ def main():
                 sys.exit(1)
             
             print("\n2. Creating package...")
-            # Continue with normal package creation
             temp_dir, zip_path = download_core()
             try:
-                work_dir = os.path.join(temp_dir, f"arduino-esp32-{ESP32_CORE_VERSION}")
+                # Extract directly to temp_dir
                 with zipfile.ZipFile(zip_path, 'r') as zip_ref:
                     zip_ref.extractall(temp_dir)
+                
+                # Use temp_dir as work_dir since files are extracted there
+                work_dir = temp_dir
                 
                 apply_patches(work_dir)
                 package_file = create_package(work_dir)
