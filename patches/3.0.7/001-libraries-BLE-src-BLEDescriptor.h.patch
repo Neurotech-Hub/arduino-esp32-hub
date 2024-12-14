@@ -1,0 +1,4 @@
+# ESP32 Hub Patch for libraries/BLE/src/BLEDescriptor.h
+# Generated: 2024-12-14 10:47:47.062520
+# Purpose: Fix BLE memory leaks.
+#

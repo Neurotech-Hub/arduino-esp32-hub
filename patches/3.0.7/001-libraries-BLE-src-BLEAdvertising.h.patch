@@ -1,0 +1,4 @@
+# ESP32 Hub Patch for libraries/BLE/src/BLEAdvertising.h
+# Generated: 2024-12-14 10:47:47.067199
+# Purpose: Fix BLE memory leaks.
+#

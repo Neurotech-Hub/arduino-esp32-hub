@@ -1,34 +1,82 @@
 {
-    "packages": [
+  "packages": [
+    {
+      "name": "esp32-hub",
+      "maintainer": "Neurotech Hub",
+      "websiteURL": "https://github.com/Neurotech-Hub/arduino-esp32-hub",
+      "email": "gaidica@wustl.edu",
+      "help": {
+        "online": "https://github.com/Neurotech-Hub/arduino-esp32-hub/issues"
+      },
+      "platforms": [
         {
-            "name": "esp32-hub",
-            "maintainer": "Neurotech Hub",
-            "websiteURL": "https://github.com/Neurotech-Hub/arduino-esp32-hub",
-            "email": "",
-            "help": {
-                "online": "https://github.com/Neurotech-Hub/arduino-esp32-hub/issues"
+          "name": "ESP32 Hub Boards",
+          "architecture": "esp32",
+          "version": "3.0.7",
+          "category": "ESP32",
+          "url": "https://github.com/Neurotech-Hub/arduino-esp32-hub/releases/download/v3.0.7/esp32-hub-3.0.7.zip",
+          "archiveFileName": "esp32-hub-3.0.7.zip",
+          "checksum": "SHA-256:2e04e3a2ab8877811ce90843448714d7f805711bacbfbd93a277ecd48dd0779a",
+          "size": "37015314",
+          "help": {
+            "online": "https://github.com/Neurotech-Hub/arduino-esp32-hub/issues"
+          },
+          "boards": [
+            {
+              "name": "Adafruit Feather ESP32 V2"
             },
-            "platforms": [
-                {
-                    "name": "ESP32 Hub Boards",
-                    "architecture": "esp32",
-                    "version": "3.0.7",
-                    "category": "ESP32",
-                    "url": "",
-                    "archiveFileName": "esp32-hub-3.0.7.zip",
-                    "checksum": "",
-                    "size": "",
-                    "help": {
-                        "online": "https://github.com/Neurotech-Hub/arduino-esp32-hub/issues"
-                    },
-                    "boards": [
-                        {
-                            "name": "ESP32 HubLink"
-                        }
-                    ],
-                    "toolsDependencies": []
-                }
-            ]
+            {
+              "name": "Adafruit Feather ESP32-C6"
+            },
+            {
+              "name": "Adafruit Feather ESP32-S2"
+            },
+            {
+              "name": "Adafruit Feather ESP32-S2 Reverse TFT"
+            },
+            {
+              "name": "Adafruit Feather ESP32-S2 TFT"
+            },
+            {
+              "name": "Adafruit Feather ESP32-S3 2MB PSRAM"
+            },
+            {
+              "name": "Adafruit Feather ESP32-S3 No PSRAM"
+            },
+            {
+              "name": "Adafruit Feather ESP32-S3 Reverse TFT"
+            },
+            {
+              "name": "Adafruit Feather ESP32-S3 TFT"
+            },
+            {
+              "name": "ESP32 Dev Module"
+            },
+            {
+              "name": "ESP32C2 Dev Module"
+            },
+            {
+              "name": "ESP32C3 Dev Module"
+            },
+            {
+              "name": "ESP32C6 Dev Module"
+            },
+            {
+              "name": "ESP32H2 Dev Module"
+            },
+            {
+              "name": "ESP32S2 Dev Module"
+            },
+            {
+              "name": "ESP32S3 Dev Module"
+            },
+            {
+              "name": "FED4 by Kravtiz Lab"
+            }
+          ],
+          "toolsDependencies": []
         }
-    ]
+      ]
+    }
+  ]
 }

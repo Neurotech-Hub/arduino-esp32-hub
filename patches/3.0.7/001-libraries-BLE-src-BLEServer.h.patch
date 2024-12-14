@@ -1,0 +1,137 @@
+# ESP32 Hub Patch for libraries/BLE/src/BLEServer.h
+# Generated: 2024-12-14 10:47:47.053743
+# Purpose: Fix BLE memory leaks.
+#
+--- original/arduino-esp32-3.0.7/libraries/BLE/src/BLEServer.h	2024-12-14 10:40:05
++++ modified/libraries/BLE/src/BLEServer.h	2024-12-13 19:03:11
+@@ -28,16 +28,18 @@
+ 
+ class BLEServerCallbacks;
+ /* TODO possibly refactor this struct */
+-typedef struct {
+-  void *peer_device;  // peer device BLEClient or BLEServer - maybe its better to have 2 structures or union here
+-  bool connected;     // do we need it?
+-  uint16_t mtu;       // every peer device negotiate own mtu
++typedef struct
++{
++  void *peer_device; // peer device BLEClient or BLEServer - maybe its better to have 2 structures or union here
++  bool connected;    // do we need it?
++  uint16_t mtu;      // every peer device negotiate own mtu
+ } conn_status_t;
+ 
+ /**
+  * @brief A data structure that manages the %BLE servers owned by a BLE server.
+  */
+-class BLEServiceMap {
++class BLEServiceMap
++{
+ public:
+   BLEService *getByHandle(uint16_t handle);
+   BLEService *getByUUID(const char *uuid);
+@@ -61,7 +63,8 @@
+ /**
+  * @brief The model of a %BLE server.
+  */
+-class BLEServer {
++class BLEServer
++{
+ public:
+   uint32_t getConnectedCount();
+   BLEService *createService(const char *uuid);
+@@ -86,6 +89,23 @@
+   uint16_t getPeerMTU(uint16_t conn_id);
+   uint16_t getConnId();
+ 
++  // Add explicit cleanup method
++  void deleteServices()
++  {
++    BLEService *pService = m_serviceMap.getFirst();
++    while (pService != nullptr)
++    {
++      removeService(pService);
++      pService = m_serviceMap.getFirst();
++    }
++  }
++
++  // Add destructor to ensure cleanup
++  ~BLEServer()
++  {
++    deleteServices();
++  }
++
+ private:
+   BLEServer();
+   friend class BLEService;
+@@ -104,47 +124,49 @@
+   BLEServiceMap m_serviceMap;
+   BLEServerCallbacks *m_pServerCallbacks = nullptr;
+ 
++  // Just declare the method, implementation will be in cpp
+   void createApp(uint16_t appId);
+   uint16_t getGattsIf();
+   void handleGATTServerEvent(esp_gatts_cb_event_t event, esp_gatt_if_t gatts_if, esp_ble_gatts_cb_param_t *param);
+   void registerApp(uint16_t);
+-};  // BLEServer
++}; // BLEServer
+ 
+ /**
+  * @brief Callbacks associated with the operation of a %BLE server.
+  */
+-class BLEServerCallbacks {
++class BLEServerCallbacks
++{
+ public:
+-  virtual ~BLEServerCallbacks(){};
++  virtual ~BLEServerCallbacks() {};
+   /**
+-	 * @brief Handle a new client connection.
+-	 *
+-	 * When a new client connects, we are invoked.
+-	 *
+-	 * @param [in] pServer A reference to the %BLE server that received the client connection.
+-	 */
++   * @brief Handle a new client connection.
++   *
++   * When a new client connects, we are invoked.
++   *
++   * @param [in] pServer A reference to the %BLE server that received the client connection.
++   */
+   virtual void onConnect(BLEServer *pServer);
+   virtual void onConnect(BLEServer *pServer, esp_ble_gatts_cb_param_t *param);
+   /**
+-	 * @brief Handle an existing client disconnection.
+-	 *
+-	 * When an existing client disconnects, we are invoked.
+-	 *
+-	 * @param [in] pServer A reference to the %BLE server that received the existing client disconnection.
+-	 */
++   * @brief Handle an existing client disconnection.
++   *
++   * When an existing client disconnects, we are invoked.
++   *
++   * @param [in] pServer A reference to the %BLE server that received the existing client disconnection.
++   */
+   virtual void onDisconnect(BLEServer *pServer);
+   virtual void onDisconnect(BLEServer *pServer, esp_ble_gatts_cb_param_t *param);
+ 
+   /**
+-	 * @brief Handle a new client connection.
+-	 *
+-	 * When the MTU changes this method is invoked.
+-	 *
+-	 * @param [in] pServer A reference to the %BLE server that received the client connection.
+-	 * @param [in] param A reference to esp_ble_gatts_cb_param_t.
+-	 */
++   * @brief Handle a new client connection.
++   *
++   * When the MTU changes this method is invoked.
++   *
++   * @param [in] pServer A reference to the %BLE server that received the client connection.
++   * @param [in] param A reference to esp_ble_gatts_cb_param_t.
++   */
+   virtual void onMtuChanged(BLEServer *pServer, esp_ble_gatts_cb_param_t *param);
+-};  // BLEServerCallbacks
++}; // BLEServerCallbacks
+ 
+ #endif /* CONFIG_BLUEDROID_ENABLED */
+ #endif /* SOC_BLE_SUPPORTED */

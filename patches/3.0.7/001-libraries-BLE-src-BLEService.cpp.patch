@@ -1,0 +1,4 @@
+# ESP32 Hub Patch for libraries/BLE/src/BLEService.cpp
+# Generated: 2024-12-14 10:47:47.080236
+# Purpose: Fix BLE memory leaks.
+#

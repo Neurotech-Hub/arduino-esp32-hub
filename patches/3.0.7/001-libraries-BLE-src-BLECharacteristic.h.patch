@@ -1,0 +1,4 @@
+# ESP32 Hub Patch for libraries/BLE/src/BLECharacteristic.h
+# Generated: 2024-12-14 10:47:47.071490
+# Purpose: Fix BLE memory leaks.
+#
