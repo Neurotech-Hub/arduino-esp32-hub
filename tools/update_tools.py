@@ -38,13 +38,20 @@ def find_tools_for_version(package_data, version=CORE_VERSION):
         print(f"Error: Could not find platform version {version}")
         sys.exit(1)
     
-    # Get all tool dependencies
+    # Get all tool dependencies and modify packager
+    tools_dependencies = []
     for tool_dep in platform['toolsDependencies']:
         if tool_dep['name'] not in tools_found:
             tools_found.add(tool_dep['name'])
+            
+            # Create modified dependency with our packager
+            modified_dep = tool_dep.copy()
+            modified_dep['packager'] = 'esp32-hub'  # Change packager to our package
+            tools_dependencies.append(modified_dep)
+            
             print(f"Found tool dependency: {tool_dep['name']} v{tool_dep['version']}")
             
-            # Find the complete tool definition
+            # Find and modify the complete tool definition
             tool_def = next(
                 (tool for tool in package_data['packages'][0].get('tools', [])
                  if tool['name'] == tool_dep['name'] and 
@@ -53,12 +60,15 @@ def find_tools_for_version(package_data, version=CORE_VERSION):
             )
             
             if tool_def:
-                tools_definitions.append(tool_def)
+                # Create a modified copy of the tool definition
+                modified_tool = tool_def.copy()
+                modified_tool['name'] = tool_dep['name']  # Ensure name matches
+                tools_definitions.append(modified_tool)
                 print(f"  - Found complete definition with {len(tool_def.get('systems', []))} system variants")
             else:
                 print(f"  ! Warning: Could not find complete tool definition")
             
-    return platform['toolsDependencies'], tools_definitions
+    return tools_dependencies, tools_definitions
 
 def update_package_index(tools_dependencies, tools_definitions):
     """Update tools in the package index."""
