@@ -9,6 +9,7 @@ import zipfile
 import hashlib
 import json
 import datetime
+import fnmatch
 
 ESP32_CORE_VERSION = "3.0.7"
 ESP32_CORE_URL = f"https://github.com/espressif/arduino-esp32/archive/refs/tags/{ESP32_CORE_VERSION}.zip"
@@ -147,6 +148,24 @@ def create_package(work_dir):
     print("Creating package...")
     output_file = PACKAGE_NAME
     
+    # Files and directories to exclude
+    exclude_patterns = [
+        '.*',           # All hidden files/dirs (.git, .github, etc.)
+        'tests',        # Test directory
+        '__pycache__',  # Python cache
+        '*.pyc',        # Python compiled files
+        '.gitignore',
+        '.gitmodules',
+        '.pre-commit-config.yaml',
+        '.prettierignore',
+        '.readthedocs.yaml',
+        '.vale.ini',
+        '.flake8',
+        '.editorconfig',
+        '.codespellrc',
+        '.clang-format'
+    ]
+    
     # Create a temporary directory for package structure
     temp_dir = tempfile.mkdtemp()
     package_dir = os.path.join(temp_dir, "esp32-hub")
@@ -155,14 +174,18 @@ def create_package(work_dir):
         # Create the package directory first
         os.makedirs(package_dir, exist_ok=True)
         
-        # Copy all files except boards.txt and variants
+        # Copy all files except boards.txt, variants, and excluded patterns
         for item in os.listdir(work_dir):
+            # Skip if item matches any exclude pattern
+            if any(fnmatch.fnmatch(item, pattern) for pattern in exclude_patterns):
+                continue
+                
             src = os.path.join(work_dir, item)
             dst = os.path.join(package_dir, item)
             
             if item not in ['boards.txt', 'variants']:
                 if os.path.isdir(src):
-                    shutil.copytree(src, dst)
+                    shutil.copytree(src, dst, ignore=shutil.ignore_patterns(*exclude_patterns))
                 else:
                     shutil.copy2(src, dst)
         

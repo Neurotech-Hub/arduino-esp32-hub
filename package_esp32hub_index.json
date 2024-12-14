@@ -16,8 +16,8 @@
           "category": "ESP32",
           "url": "https://github.com/Neurotech-Hub/arduino-esp32-hub/releases/download/v3.0.7/esp32-hub-3.0.7.zip",
           "archiveFileName": "esp32-hub-3.0.7.zip",
-          "checksum": "SHA-256:5062d97a6113c71cd9d4bd2d0c800d338aad0ddc9b9a20e7a39bcd51ca02dbd0",
-          "size": "33528733",
+          "checksum": "SHA-256:745c7eb8ebc627fcdb3d37e2e78ac7d1f9dc298e2ecaad1598690cdda898ed74",
+          "size": "33334640",
           "help": {
             "online": "https://github.com/Neurotech-Hub/arduino-esp32-hub/issues"
           },
