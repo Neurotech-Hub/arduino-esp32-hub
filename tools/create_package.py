@@ -147,12 +147,67 @@ def create_package(work_dir):
     print("Creating package...")
     output_file = PACKAGE_NAME
     
-    with zipfile.ZipFile(output_file, 'w', zipfile.ZIP_DEFLATED) as zipf:
-        for root, _, files in os.walk(work_dir):
-            for file in files:
-                file_path = os.path.join(root, file)
-                arcname = os.path.relpath(file_path, work_dir)
-                zipf.write(file_path, arcname)
+    # Create a temporary directory for package structure
+    temp_dir = tempfile.mkdtemp()
+    package_dir = os.path.join(temp_dir, "esp32-hub")
+    
+    try:
+        # Create the package directory first
+        os.makedirs(package_dir, exist_ok=True)
+        
+        # Copy all files except boards.txt and variants
+        for item in os.listdir(work_dir):
+            src = os.path.join(work_dir, item)
+            dst = os.path.join(package_dir, item)
+            
+            if item not in ['boards.txt', 'variants']:
+                if os.path.isdir(src):
+                    shutil.copytree(src, dst)
+                else:
+                    shutil.copy2(src, dst)
+        
+        # Copy our custom boards.txt
+        shutil.copy2('boards.txt', os.path.join(package_dir, 'boards.txt'))
+        
+        # Copy our variants directory
+        shutil.copytree('variants', os.path.join(package_dir, 'variants'))
+        
+        # Create the ZIP with correct structure
+        with zipfile.ZipFile(output_file, 'w', zipfile.ZIP_DEFLATED) as zipf:
+            for root, _, files in os.walk(package_dir):
+                for file in files:
+                    file_path = os.path.join(root, file)
+                    arcname = os.path.relpath(file_path, temp_dir)
+                    zipf.write(file_path, arcname)
+    
+    finally:
+        shutil.rmtree(temp_dir)
+    
+    print(f"\nPackage created: {output_file}")
+    print("Verifying ZIP structure...")
+    
+    # Verify ZIP structure
+    with zipfile.ZipFile(output_file, 'r') as zip_ref:
+        files = zip_ref.namelist()
+        root_dirs = set(f.split('/')[0] for f in files)
+        if len(root_dirs) != 1 or 'esp32-hub' not in root_dirs:
+            print("ERROR: ZIP does not have single 'esp32-hub' root directory!")
+            return None
+        
+        required_files = ['esp32-hub/boards.txt', 'esp32-hub/platform.txt']
+        required_dirs = ['esp32-hub/cores', 'esp32-hub/variants', 'esp32-hub/tools']
+        
+        for f in required_files:
+            if f not in files:
+                print(f"ERROR: Missing required file: {f}")
+                return None
+        
+        for d in required_dirs:
+            if not any(f.startswith(d + '/') for f in files):
+                print(f"ERROR: Missing required directory: {d}")
+                return None
+        
+        print("ZIP structure verified successfully!")
     
     return output_file
 
