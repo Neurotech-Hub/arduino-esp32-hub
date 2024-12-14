@@ -1,8 +1,8 @@
 # ESP32 Hub Patch for libraries/BLE/src/BLEService.h
-# Generated: 2024-12-14 10:47:47.058233
+# Generated: 2024-12-14 14:47:59.825965
 # Purpose: Fix BLE memory leaks.
 #
---- original/arduino-esp32-3.0.7/libraries/BLE/src/BLEService.h	2024-12-14 10:40:05
+--- original/libraries/BLE/src/BLEService.h	2024-12-14 14:46:17
 +++ modified/libraries/BLE/src/BLEService.h	2024-12-13 19:03:11
 @@ -25,7 +25,8 @@
  /**

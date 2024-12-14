@@ -1,8 +1,8 @@
 # ESP32 Hub Patch for libraries/BLE/src/BLEServer.cpp
-# Generated: 2024-12-14 10:47:47.106286
+# Generated: 2024-12-14 14:47:59.874992
 # Purpose: Fix BLE memory leaks.
 #
---- original/arduino-esp32-3.0.7/libraries/BLE/src/BLEServer.cpp	2024-12-14 10:40:05
+--- original/libraries/BLE/src/BLEServer.cpp	2024-12-14 14:46:17
 +++ modified/libraries/BLE/src/BLEServer.cpp	2024-12-13 19:03:11
 @@ -27,18 +27,30 @@
   * This class is not designed to be individually instantiated.  Instead one should create a server by asking

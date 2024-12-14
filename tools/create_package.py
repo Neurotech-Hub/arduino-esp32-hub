@@ -40,16 +40,45 @@ def setup_working_directory():
     print("Setting up working directory with original core files...")
     temp_dir, zip_path = download_core()
     try:
+        # Create original directory
+        os.makedirs(original_dir, exist_ok=True)
+        
+        # Extract directly to original directory (not in a subdirectory)
         with zipfile.ZipFile(zip_path, 'r') as zip_ref:
-            zip_ref.extractall(original_dir)
+            for member in zip_ref.namelist():
+                # Remove the arduino-esp32-VERSION prefix from paths
+                if member.startswith(f'esp32-{ESP32_CORE_VERSION}/'):
+                    new_name = member[len(f'esp32-{ESP32_CORE_VERSION}/'):]
+                    if new_name:  # Skip the directory itself
+                        target_path = os.path.join(original_dir, new_name)
+                        
+                        # Skip if it's a directory
+                        if new_name.endswith('/'):
+                            continue
+                        
+                        # Create parent directories if they don't exist
+                        os.makedirs(os.path.dirname(target_path), exist_ok=True)
+                        
+                        # Extract the file
+                        source = zip_ref.open(member)
+                        target = open(target_path, 'wb')
+                        with source, target:
+                            shutil.copyfileobj(source, target)
     finally:
         shutil.rmtree(temp_dir)
 
 def create_patches():
     """Create patch files from modified sources."""
     print("Creating patches from modified files...")
-    original_dir = os.path.join(WORKING_DIR, "original", f"arduino-esp32-{ESP32_CORE_VERSION}")
+    original_dir = os.path.join(WORKING_DIR, "original")
     modified_dir = os.path.join(WORKING_DIR, "modified")
+    
+    # Clean up existing patches
+    if os.path.exists(PATCH_DIR):
+        print("Cleaning up existing patches...")
+        for f in os.listdir(PATCH_DIR):
+            if f.endswith('.patch'):
+                os.remove(os.path.join(PATCH_DIR, f))
     
     if not os.path.exists(modified_dir):
         print("No modified files found in working/modified/")
@@ -62,23 +91,20 @@ def create_patches():
     for root, _, files in os.walk(modified_dir):
         for file in files:
             if file.endswith(('.cpp', '.h')):
-                # Get relative path from modified dir
                 rel_path = os.path.relpath(root, modified_dir)
                 
-                # Construct paths
                 modified_file = os.path.join(root, file)
                 original_file = os.path.join(original_dir, rel_path, file)
                 
                 if os.path.exists(original_file):
-                    # Create patch name preserving directory structure
                     patch_name = f"001-{rel_path.replace('/', '-')}-{file}.patch"
                     patch_path = os.path.join(PATCH_DIR, patch_name)
                     
                     print(f"Processing: {rel_path}/{file}")
                     
-                    # Create diff using relative paths
+                    # Create diff with correct paths
                     temp_patch = patch_path + ".tmp"
-                    os.system(f"cd {WORKING_DIR} && diff -u original/arduino-esp32-{ESP32_CORE_VERSION}/{rel_path}/{file} modified/{rel_path}/{file} > {temp_patch}")
+                    os.system(f"cd {WORKING_DIR} && diff -u original/{rel_path}/{file} modified/{rel_path}/{file} > {temp_patch}")
                     
                     # Add header and copy content
                     with open(temp_patch, 'r') as src, open(patch_path, 'w') as dst:
@@ -86,10 +112,7 @@ def create_patches():
                         dst.write(f"# Generated: {datetime.datetime.now()}\n")
                         dst.write(f"# Purpose: Fix BLE memory leaks.\n")
                         dst.write("#\n")
-                        # Replace paths in diff output to be relative
                         content = src.read()
-                        content = content.replace(f"{original_dir}/", "")
-                        content = content.replace(f"{modified_dir}/", "")
                         dst.write(content)
                     
                     # Remove temp file
@@ -103,6 +126,10 @@ def apply_patches(work_dir):
     print("\n=== Patch Application ===")
     print(f"Working directory: {os.path.basename(work_dir)}")
     
+    # Adjust work_dir to point to the esp32-3.0.7 subdirectory
+    work_dir = os.path.join(work_dir, f"esp32-{ESP32_CORE_VERSION}")
+    print(f"Adjusted work directory: {work_dir}")
+    
     if not os.path.exists(PATCH_DIR):
         print(f"[ERROR] Patch directory not found: {PATCH_DIR}")
         return
@@ -115,17 +142,28 @@ def apply_patches(work_dir):
     
     for patch in sorted(patch_files):
         patch_path = os.path.join(PATCH_DIR, patch)
-        print(f"\nTrying: {patch}", end="")
+        print(f"\nTrying: {patch}")
         
-        # Capture patch command output
+        # Print patch content for debugging
+        print("\nPatch content preview:")
+        with open(patch_path, 'r') as f:
+            print(''.join(f.readlines()[:10]))
+        
+        # Check if target file exists
+        target_file = os.path.join(work_dir, "libraries/BLE/src/BLE2902.cpp")
+        print(f"\nChecking target file: {target_file}")
+        print(f"File exists: {os.path.exists(target_file)}")
+        
+        # Use -p1 to strip one directory level from patch paths
         cmd = f"patch -p1 -d {work_dir} < {patch_path} 2>&1"
+        print(f"\nRunning command: {cmd}")
         result = os.popen(cmd).read()
+        print(f"Patch result:\n{result}")
         
         if "FAILED" in result or "ERROR" in result:
             print(" [FAILED]")
             print("-" * 40)
             print("Error details:")
-            # Only print relevant error lines
             for line in result.split('\n'):
                 if any(x in line for x in ['FAILED', 'ERROR', 'offset', 'reject']):
                     print(f"  {line.strip()}")
@@ -154,10 +192,10 @@ def create_package(work_dir):
     
     # Files and directories to exclude
     exclude_patterns = [
-        '.*',           # All hidden files/dirs (.git, .github, etc.)
-        'tests',        # Test directory
-        '__pycache__',  # Python cache
-        '*.pyc',        # Python compiled files
+        '.*',           # All hidden files/dirs
+        'tests',        
+        '__pycache__',  
+        '*.pyc',        
         '.gitignore',
         '.gitmodules',
         '.pre-commit-config.yaml',
@@ -175,31 +213,33 @@ def create_package(work_dir):
     package_dir = os.path.join(temp_dir, "esp32-hub")
     
     try:
-        # Create the package directory first
+        # Create the package directory
         os.makedirs(package_dir, exist_ok=True)
         
-        # Copy all files except boards.txt, variants, and excluded patterns
-        for item in os.listdir(work_dir):
-            # Skip if item matches any exclude pattern
-            if any(fnmatch.fnmatch(item, pattern) for pattern in exclude_patterns):
-                continue
-                
-            src = os.path.join(work_dir, item)
+        # Get path to core files
+        core_dir = os.path.join(work_dir, f"esp32-{ESP32_CORE_VERSION}")
+        
+        # First, copy everything from the core
+        for item in os.listdir(core_dir):
+            src = os.path.join(core_dir, item)
             dst = os.path.join(package_dir, item)
             
-            if item not in ['boards.txt', 'variants']:
-                if os.path.isdir(src):
-                    shutil.copytree(src, dst, ignore=shutil.ignore_patterns(*exclude_patterns))
-                else:
-                    shutil.copy2(src, dst)
+            if os.path.isdir(src):
+                shutil.copytree(src, dst, ignore=shutil.ignore_patterns(*exclude_patterns))
+            else:
+                shutil.copy2(src, dst)
         
-        # Copy our custom boards.txt
-        shutil.copy2('boards.txt', os.path.join(package_dir, 'boards.txt'))
+        # Then, overwrite with our custom files
+        if os.path.exists('boards.txt'):
+            shutil.copy2('boards.txt', os.path.join(package_dir, 'boards.txt'))
         
-        # Copy our variants directory
-        shutil.copytree('variants', os.path.join(package_dir, 'variants'))
+        if os.path.exists('variants'):
+            # Remove core variants directory
+            shutil.rmtree(os.path.join(package_dir, 'variants'))
+            # Copy our variants directory
+            shutil.copytree('variants', os.path.join(package_dir, 'variants'))
         
-        # Create the ZIP with correct structure
+        # Create the ZIP
         with zipfile.ZipFile(output_file, 'w', zipfile.ZIP_DEFLATED) as zipf:
             for root, _, files in os.walk(package_dir):
                 for file in files:
@@ -318,12 +358,25 @@ def main():
                 # Use temp_dir as work_dir since files are extracted there
                 work_dir = temp_dir
                 
+                # Debug: Print directory structure before applying patches
+                print("\nDirectory structure before patches:")
+                os.system(f"ls -R {work_dir}")
+                
                 apply_patches(work_dir)
                 package_file = create_package(work_dir)
                 update_package_index(package_file)
                 
-            finally:
-                shutil.rmtree(temp_dir)
+                # Debug: Keep the temp directory for inspection
+                print(f"\nTemp directory preserved for inspection: {temp_dir}")
+                return
+                
+            except Exception as e:
+                print(f"Error: {e}")
+                print(f"\nTemp directory preserved for inspection: {temp_dir}")
+                return
+                
+            # finally:
+            #     shutil.rmtree(temp_dir)  # Comment out cleanup for debugging
             return
 
 if __name__ == "__main__":

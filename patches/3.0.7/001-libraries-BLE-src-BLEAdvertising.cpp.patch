@@ -1,8 +1,8 @@
 # ESP32 Hub Patch for libraries/BLE/src/BLEAdvertising.cpp
-# Generated: 2024-12-14 10:47:47.086405
+# Generated: 2024-12-14 14:47:59.855970
 # Purpose: Fix BLE memory leaks.
 #
---- original/arduino-esp32-3.0.7/libraries/BLE/src/BLEAdvertising.cpp	2024-12-14 10:40:05
+--- original/libraries/BLE/src/BLEAdvertising.cpp	2024-12-14 14:46:17
 +++ modified/libraries/BLE/src/BLEAdvertising.cpp	2024-12-13 19:03:11
 @@ -31,7 +31,8 @@
   * @brief Construct a default advertising object.
