@@ -1,0 +1,34 @@
+{
+    "packages": [
+        {
+            "name": "esp32-hub",
+            "maintainer": "Neurotech Hub",
+            "websiteURL": "https://github.com/Neurotech-Hub/arduino-esp32-hub",
+            "email": "",
+            "help": {
+                "online": "https://github.com/Neurotech-Hub/arduino-esp32-hub/issues"
+            },
+            "platforms": [
+                {
+                    "name": "ESP32 Hub Boards",
+                    "architecture": "esp32",
+                    "version": "3.0.7",
+                    "category": "ESP32",
+                    "url": "",
+                    "archiveFileName": "esp32-hub-3.0.7.zip",
+                    "checksum": "",
+                    "size": "",
+                    "help": {
+                        "online": "https://github.com/Neurotech-Hub/arduino-esp32-hub/issues"
+                    },
+                    "boards": [
+                        {
+                            "name": "ESP32 HubLink"
+                        }
+                    ],
+                    "toolsDependencies": []
+                }
+            ]
+        }
+    ]
+}
