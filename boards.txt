@@ -702,7 +702,6 @@ adafruit_feather_esp32s3_nopsram.menu.ZigbeeMode.zczr.build.zigbee_libs=-lesp_zb
 # FED4 by Kravtiz Lab
 
 fed4.name=FED4 by Kravitz Lab
-
 fed4.bootloader.tool=esptool_py
 fed4.bootloader.tool.default=esptool_py
 
@@ -725,7 +724,7 @@ fed4.build.bootloader_addr=0x0
 fed4.build.target=esp32s3
 fed4.build.mcu=esp32s3
 fed4.build.core=esp32
-fed4.build.variant=fed4
+fed4.build.variant=esp32s3
 fed4.build.board=FED4
 
 fed4.build.usb_mode=1
@@ -954,10 +953,8 @@ fed4.menu.ZigbeeMode.zczr.build.zigbee_libs=-lesp_zb_api_zczr -lesp_zb_cli_comma
 # Hublink Node
 
 hublink_node.name=Hublink Node
-
 hublink_node.bootloader.tool=esptool_py
 hublink_node.bootloader.tool.default=esptool_py
-
 hublink_node.upload.tool=esptool_py
 hublink_node.upload.tool.default=esptool_py
 hublink_node.upload.tool.network=esp_ota
@@ -977,7 +974,7 @@ hublink_node.build.bootloader_addr=0x0
 hublink_node.build.target=esp32s3
 hublink_node.build.mcu=esp32s3
 hublink_node.build.core=esp32
-hublink_node.build.variant=hublink_node
+hublink_node.build.variant=esp32s3
 hublink_node.build.board=HUBLINK_NODE
 
 hublink_node.build.usb_mode=1
