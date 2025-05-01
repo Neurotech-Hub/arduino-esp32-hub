@@ -724,7 +724,7 @@ fed4.build.bootloader_addr=0x0
 fed4.build.target=esp32s3
 fed4.build.mcu=esp32s3
 fed4.build.core=esp32
-fed4.build.variant=esp32s3
+fed4.build.variant=fed4
 fed4.build.board=FED4
 
 fed4.build.usb_mode=1
@@ -974,7 +974,7 @@ hublink_node.build.bootloader_addr=0x0
 hublink_node.build.target=esp32s3
 hublink_node.build.mcu=esp32s3
 hublink_node.build.core=esp32
-hublink_node.build.variant=esp32s3
+hublink_node.build.variant=hublink_node
 hublink_node.build.board=HUBLINK_NODE
 
 hublink_node.build.usb_mode=1
