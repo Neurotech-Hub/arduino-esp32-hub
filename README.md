@@ -1,4 +1,4 @@
-# Neurotech Hub | esp32 Arduino Boards
+# esp32 Hub
 
 Custom variants and patches for the ESP32 Arduino core, maintained by Neurotech Hub.
 
@@ -20,6 +20,8 @@ Custom variants and patches for the ESP32 Arduino core, maintained by Neurotech 
 ## Development
 
 ### Complete Workflow
+
+Performing the operations below maintains only a single version of the boards. Managing legacy versions is not currently supported and would require re-tooling.
 
 1. Initial setup (only needed once). First, update the `ESP32_CORE_VERSION`.
    ```bash
