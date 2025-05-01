@@ -699,8 +699,9 @@ adafruit_feather_esp32s3_nopsram.menu.ZigbeeMode.zczr.build.zigbee_mode=-DZIGBEE
 adafruit_feather_esp32s3_nopsram.menu.ZigbeeMode.zczr.build.zigbee_libs=-lesp_zb_api_zczr -lesp_zb_cli_command -lzboss_stack.zczr -lzboss_port
 
 ##############################################################
+# FED4 by Kravtiz Lab
 
-hublink_node.name=FED4 by Kravtiz Lab
+hublink_node.name=FED4
 
 fed4.bootloader.tool=esptool_py
 fed4.bootloader.tool.default=esptool_py
@@ -951,6 +952,7 @@ fed4.menu.ZigbeeMode.zczr.build.zigbee_libs=-lesp_zb_api_zczr -lesp_zb_cli_comma
 
 ##############################################################
 # Hublink Node
+
 hublink_node.name=Hublink Node
 
 hublink_node.bootloader.tool=esptool_py
