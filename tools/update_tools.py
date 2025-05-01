@@ -8,7 +8,7 @@ from urllib.parse import urlparse
 
 ESP32_PACKAGE_URL = "https://raw.githubusercontent.com/espressif/arduino-esp32/gh-pages/package_esp32_index.json"
 PACKAGE_INDEX = "../package_esp32hub_index.json"
-CORE_VERSION = "3.0.7"
+ESP32_CORE_VERSION = "3.2.0"
 
 def fetch_esp32_package_index():
     """Download and parse the official ESP32 package index."""
@@ -21,7 +21,7 @@ def fetch_esp32_package_index():
         print(f"Error fetching ESP32 package index: {e}")
         sys.exit(1)
 
-def find_tools_for_version(package_data, version=CORE_VERSION):
+def find_tools_for_version(package_data, version=ESP32_CORE_VERSION):
     """Extract complete tool definitions for specific version."""
     print(f"\nFinding tools for version {version}...")
     tools_found = set()

@@ -700,7 +700,7 @@ adafruit_feather_esp32s3_nopsram.menu.ZigbeeMode.zczr.build.zigbee_libs=-lesp_zb
 
 ##############################################################
 
-fed4.name=FED4 by Kravtiz Lab
+hublink_node.name=FED4 by Kravtiz Lab
 
 fed4.bootloader.tool=esptool_py
 fed4.bootloader.tool.default=esptool_py
@@ -724,8 +724,8 @@ fed4.build.bootloader_addr=0x0
 fed4.build.target=esp32s3
 fed4.build.mcu=esp32s3
 fed4.build.core=esp32
-fed4.build.variant=esp32s3
-fed4.build.board=ESP32S3_DEV
+fed4.build.variant=fed4
+fed4.build.board=FED4
 
 fed4.build.usb_mode=1
 fed4.build.cdc_on_boot=0
@@ -948,3 +948,254 @@ fed4.menu.ZigbeeMode.default.build.zigbee_libs=
 fed4.menu.ZigbeeMode.zczr=Zigbee ZCZR (coordinator/router)
 fed4.menu.ZigbeeMode.zczr.build.zigbee_mode=-DZIGBEE_MODE_ZCZR
 fed4.menu.ZigbeeMode.zczr.build.zigbee_libs=-lesp_zb_api_zczr -lesp_zb_cli_command -lzboss_stack.zczr -lzboss_port
+
+##############################################################
+# Hublink Node
+hublink_node.name=Hublink Node
+
+hublink_node.bootloader.tool=esptool_py
+hublink_node.bootloader.tool.default=esptool_py
+
+hublink_node.upload.tool=esptool_py
+hublink_node.upload.tool.default=esptool_py
+hublink_node.upload.tool.network=esp_ota
+
+hublink_node.upload.maximum_size=1310720
+hublink_node.upload.maximum_data_size=327680
+hublink_node.upload.flags=
+hublink_node.upload.extra_flags=
+hublink_node.upload.use_1200bps_touch=false
+hublink_node.upload.wait_for_upload_port=false
+
+hublink_node.serial.disableDTR=false
+hublink_node.serial.disableRTS=false
+
+hublink_node.build.tarch=xtensa
+hublink_node.build.bootloader_addr=0x0
+hublink_node.build.target=esp32s3
+hublink_node.build.mcu=esp32s3
+hublink_node.build.core=esp32
+hublink_node.build.variant=hublink_node
+hublink_node.build.board=HUBLINK_NODE
+
+hublink_node.build.usb_mode=1
+hublink_node.build.cdc_on_boot=0
+hublink_node.build.msc_on_boot=0
+hublink_node.build.dfu_on_boot=0
+hublink_node.build.f_cpu=240000000L
+hublink_node.build.flash_size=4MB
+hublink_node.build.flash_freq=80m
+hublink_node.build.flash_mode=dio
+hublink_node.build.boot=qio
+hublink_node.build.boot_freq=80m
+hublink_node.build.partitions=default
+hublink_node.build.defines=
+hublink_node.build.loop_core=
+hublink_node.build.event_core=
+hublink_node.build.psram_type=qspi
+hublink_node.build.memory_type={build.boot}_{build.psram_type}
+
+## IDE 2.0 Seems to not update the value
+hublink_node.menu.JTAGAdapter.default=Disabled
+hublink_node.menu.JTAGAdapter.default.build.copy_jtag_files=0
+hublink_node.menu.JTAGAdapter.builtin=Integrated USB JTAG
+hublink_node.menu.JTAGAdapter.builtin.build.openocdscript=esp32s3-builtin.cfg
+hublink_node.menu.JTAGAdapter.builtin.build.copy_jtag_files=1
+hublink_node.menu.JTAGAdapter.external=FTDI Adapter
+hublink_node.menu.JTAGAdapter.external.build.openocdscript=esp32s3-ftdi.cfg
+hublink_node.menu.JTAGAdapter.external.build.copy_jtag_files=1
+hublink_node.menu.JTAGAdapter.bridge=ESP USB Bridge
+hublink_node.menu.JTAGAdapter.bridge.build.openocdscript=esp32s3-bridge.cfg
+hublink_node.menu.JTAGAdapter.bridge.build.copy_jtag_files=1
+
+hublink_node.menu.PSRAM.disabled=Disabled
+hublink_node.menu.PSRAM.disabled.build.defines=
+hublink_node.menu.PSRAM.disabled.build.psram_type=qspi
+hublink_node.menu.PSRAM.enabled=QSPI PSRAM
+hublink_node.menu.PSRAM.enabled.build.defines=-DBOARD_HAS_PSRAM
+hublink_node.menu.PSRAM.enabled.build.psram_type=qspi
+hublink_node.menu.PSRAM.opi=OPI PSRAM
+hublink_node.menu.PSRAM.opi.build.defines=-DBOARD_HAS_PSRAM
+hublink_node.menu.PSRAM.opi.build.psram_type=opi
+
+hublink_node.menu.FlashMode.qio=QIO 80MHz
+hublink_node.menu.FlashMode.qio.build.flash_mode=dio
+hublink_node.menu.FlashMode.qio.build.boot=qio
+hublink_node.menu.FlashMode.qio.build.boot_freq=80m
+hublink_node.menu.FlashMode.qio.build.flash_freq=80m
+hublink_node.menu.FlashMode.qio120=QIO 120MHz
+hublink_node.menu.FlashMode.qio120.build.flash_mode=dio
+hublink_node.menu.FlashMode.qio120.build.boot=qio
+hublink_node.menu.FlashMode.qio120.build.boot_freq=120m
+hublink_node.menu.FlashMode.qio120.build.flash_freq=80m
+hublink_node.menu.FlashMode.dio=DIO 80MHz
+hublink_node.menu.FlashMode.dio.build.flash_mode=dio
+hublink_node.menu.FlashMode.dio.build.boot=dio
+hublink_node.menu.FlashMode.dio.build.boot_freq=80m
+hublink_node.menu.FlashMode.dio.build.flash_freq=80m
+hublink_node.menu.FlashMode.opi=OPI 80MHz
+hublink_node.menu.FlashMode.opi.build.flash_mode=dout
+hublink_node.menu.FlashMode.opi.build.boot=opi
+hublink_node.menu.FlashMode.opi.build.boot_freq=80m
+hublink_node.menu.FlashMode.opi.build.flash_freq=80m
+
+hublink_node.menu.FlashSize.4M=4MB (32Mb)
+hublink_node.menu.FlashSize.4M.build.flash_size=4MB
+hublink_node.menu.FlashSize.8M=8MB (64Mb)
+hublink_node.menu.FlashSize.8M.build.flash_size=8MB
+hublink_node.menu.FlashSize.16M=16MB (128Mb)
+hublink_node.menu.FlashSize.16M.build.flash_size=16MB
+hublink_node.menu.FlashSize.32M=32MB (256Mb)
+hublink_node.menu.FlashSize.32M.build.flash_size=32MB
+
+hublink_node.menu.LoopCore.1=Core 1
+hublink_node.menu.LoopCore.1.build.loop_core=-DARDUINO_RUNNING_CORE=1
+hublink_node.menu.LoopCore.0=Core 0
+hublink_node.menu.LoopCore.0.build.loop_core=-DARDUINO_RUNNING_CORE=0
+
+hublink_node.menu.EventsCore.1=Core 1
+hublink_node.menu.EventsCore.1.build.event_core=-DARDUINO_EVENT_RUNNING_CORE=1
+hublink_node.menu.EventsCore.0=Core 0
+hublink_node.menu.EventsCore.0.build.event_core=-DARDUINO_EVENT_RUNNING_CORE=0
+
+hublink_node.menu.USBMode.hwcdc=Hardware CDC and JTAG
+hublink_node.menu.USBMode.hwcdc.build.usb_mode=1
+hublink_node.menu.USBMode.default=USB-OTG (TinyUSB)
+hublink_node.menu.USBMode.default.build.usb_mode=0
+
+hublink_node.menu.CDCOnBoot.default=Disabled
+hublink_node.menu.CDCOnBoot.default.build.cdc_on_boot=0
+hublink_node.menu.CDCOnBoot.cdc=Enabled
+hublink_node.menu.CDCOnBoot.cdc.build.cdc_on_boot=1
+
+hublink_node.menu.MSCOnBoot.default=Disabled
+hublink_node.menu.MSCOnBoot.default.build.msc_on_boot=0
+hublink_node.menu.MSCOnBoot.msc=Enabled (Requires USB-OTG Mode)
+hublink_node.menu.MSCOnBoot.msc.build.msc_on_boot=1
+
+hublink_node.menu.DFUOnBoot.default=Disabled
+hublink_node.menu.DFUOnBoot.default.build.dfu_on_boot=0
+hublink_node.menu.DFUOnBoot.dfu=Enabled (Requires USB-OTG Mode)
+hublink_node.menu.DFUOnBoot.dfu.build.dfu_on_boot=1
+
+hublink_node.menu.UploadMode.default=UART0 / Hardware CDC
+hublink_node.menu.UploadMode.default.upload.use_1200bps_touch=false
+hublink_node.menu.UploadMode.default.upload.wait_for_upload_port=false
+hublink_node.menu.UploadMode.cdc=USB-OTG CDC (TinyUSB)
+hublink_node.menu.UploadMode.cdc.upload.use_1200bps_touch=true
+hublink_node.menu.UploadMode.cdc.upload.wait_for_upload_port=true
+
+hublink_node.menu.PartitionScheme.default=Default 4MB with spiffs (1.2MB APP/1.5MB SPIFFS)
+hublink_node.menu.PartitionScheme.default.build.partitions=default
+hublink_node.menu.PartitionScheme.defaultffat=Default 4MB with ffat (1.2MB APP/1.5MB FATFS)
+hublink_node.menu.PartitionScheme.defaultffat.build.partitions=default_ffat
+hublink_node.menu.PartitionScheme.default_8MB=8M with spiffs (3MB APP/1.5MB SPIFFS)
+hublink_node.menu.PartitionScheme.default_8MB.build.partitions=default_8MB
+hublink_node.menu.PartitionScheme.default_8MB.upload.maximum_size=3342336
+hublink_node.menu.PartitionScheme.minimal=Minimal (1.3MB APP/700KB SPIFFS)
+hublink_node.menu.PartitionScheme.minimal.build.partitions=minimal
+hublink_node.menu.PartitionScheme.no_fs=No FS 4MB (2MB APP x2)
+hublink_node.menu.PartitionScheme.no_fs.build.partitions=no_fs
+hublink_node.menu.PartitionScheme.no_fs.upload.maximum_size=2031616
+hublink_node.menu.PartitionScheme.no_ota=No OTA (2MB APP/2MB SPIFFS)
+hublink_node.menu.PartitionScheme.no_ota.build.partitions=no_ota
+hublink_node.menu.PartitionScheme.no_ota.upload.maximum_size=2097152
+hublink_node.menu.PartitionScheme.noota_3g=No OTA (1MB APP/3MB SPIFFS)
+hublink_node.menu.PartitionScheme.noota_3g.build.partitions=noota_3g
+hublink_node.menu.PartitionScheme.noota_3g.upload.maximum_size=1048576
+hublink_node.menu.PartitionScheme.noota_ffat=No OTA (2MB APP/2MB FATFS)
+hublink_node.menu.PartitionScheme.noota_ffat.build.partitions=noota_ffat
+hublink_node.menu.PartitionScheme.noota_ffat.upload.maximum_size=2097152
+hublink_node.menu.PartitionScheme.noota_3gffat=No OTA (1MB APP/3MB FATFS)
+hublink_node.menu.PartitionScheme.noota_3gffat.build.partitions=noota_3gffat
+hublink_node.menu.PartitionScheme.noota_3gffat.upload.maximum_size=1048576
+hublink_node.menu.PartitionScheme.huge_app=Huge APP (3MB No OTA/1MB SPIFFS)
+hublink_node.menu.PartitionScheme.huge_app.build.partitions=huge_app
+hublink_node.menu.PartitionScheme.huge_app.upload.maximum_size=3145728
+hublink_node.menu.PartitionScheme.min_spiffs=Minimal SPIFFS (1.9MB APP with OTA/190KB SPIFFS)
+hublink_node.menu.PartitionScheme.min_spiffs.build.partitions=min_spiffs
+hublink_node.menu.PartitionScheme.min_spiffs.upload.maximum_size=1966080
+hublink_node.menu.PartitionScheme.fatflash=16M Flash (2MB APP/12.5MB FATFS)
+hublink_node.menu.PartitionScheme.fatflash.build.partitions=ffat
+hublink_node.menu.PartitionScheme.fatflash.upload.maximum_size=2097152
+hublink_node.menu.PartitionScheme.app3M_fat9M_16MB=16M Flash (3MB APP/9.9MB FATFS)
+hublink_node.menu.PartitionScheme.app3M_fat9M_16MB.build.partitions=app3M_fat9M_16MB
+hublink_node.menu.PartitionScheme.app3M_fat9M_16MB.upload.maximum_size=3145728
+hublink_node.menu.PartitionScheme.rainmaker=RainMaker 4MB
+hublink_node.menu.PartitionScheme.rainmaker.build.partitions=rainmaker
+hublink_node.menu.PartitionScheme.rainmaker.upload.maximum_size=1966080
+hublink_node.menu.PartitionScheme.rainmaker_4MB=RainMaker 4MB No OTA
+hublink_node.menu.PartitionScheme.rainmaker_4MB.build.partitions=rainmaker_4MB_no_ota
+hublink_node.menu.PartitionScheme.rainmaker_4MB.upload.maximum_size=4038656
+hublink_node.menu.PartitionScheme.rainmaker_8MB=RainMaker 8MB
+hublink_node.menu.PartitionScheme.rainmaker_8MB.build.partitions=rainmaker_8MB
+hublink_node.menu.PartitionScheme.rainmaker_8MB.upload.maximum_size=4116480
+hublink_node.menu.PartitionScheme.app5M_fat24M_32MB=32M Flash (4.8MB APP/22MB FATFS)
+hublink_node.menu.PartitionScheme.app5M_fat24M_32MB.build.partitions=large_fat_32MB
+hublink_node.menu.PartitionScheme.app5M_fat24M_32MB.upload.maximum_size=4718592
+hublink_node.menu.PartitionScheme.app5M_little24M_32MB=32M Flash (4.8MB APP/22MB LittleFS)
+hublink_node.menu.PartitionScheme.app5M_little24M_32MB.build.partitions=large_littlefs_32MB
+hublink_node.menu.PartitionScheme.app5M_little24M_32MB.upload.maximum_size=4718592
+hublink_node.menu.PartitionScheme.esp_sr_16=ESP SR 16M (3MB APP/7MB SPIFFS/2.9MB MODEL)
+hublink_node.menu.PartitionScheme.esp_sr_16.upload.maximum_size=3145728
+hublink_node.menu.PartitionScheme.esp_sr_16.upload.extra_flags=0xD10000 {build.path}/srmodels.bin
+hublink_node.menu.PartitionScheme.esp_sr_16.build.partitions=esp_sr_16
+hublink_node.menu.PartitionScheme.zigbee_zczr=Zigbee ZCZR 4MB with spiffs
+hublink_node.menu.PartitionScheme.zigbee_zczr.build.partitions=zigbee_zczr
+hublink_node.menu.PartitionScheme.zigbee_zczr.upload.maximum_size=1310720
+hublink_node.menu.PartitionScheme.custom=Custom
+hublink_node.menu.PartitionScheme.custom.build.partitions=
+hublink_node.menu.PartitionScheme.custom.upload.maximum_size=16777216
+
+hublink_node.menu.CPUFreq.240=240MHz (WiFi)
+hublink_node.menu.CPUFreq.240.build.f_cpu=240000000L
+hublink_node.menu.CPUFreq.160=160MHz (WiFi)
+hublink_node.menu.CPUFreq.160.build.f_cpu=160000000L
+hublink_node.menu.CPUFreq.80=80MHz (WiFi)
+hublink_node.menu.CPUFreq.80.build.f_cpu=80000000L
+hublink_node.menu.CPUFreq.40=40MHz
+hublink_node.menu.CPUFreq.40.build.f_cpu=40000000L
+hublink_node.menu.CPUFreq.20=20MHz
+hublink_node.menu.CPUFreq.20.build.f_cpu=20000000L
+hublink_node.menu.CPUFreq.10=10MHz
+hublink_node.menu.CPUFreq.10.build.f_cpu=10000000L
+
+hublink_node.menu.UploadSpeed.921600=921600
+hublink_node.menu.UploadSpeed.921600.upload.speed=921600
+hublink_node.menu.UploadSpeed.115200=115200
+hublink_node.menu.UploadSpeed.115200.upload.speed=115200
+hublink_node.menu.UploadSpeed.256000.windows=256000
+hublink_node.menu.UploadSpeed.256000.upload.speed=256000
+hublink_node.menu.UploadSpeed.230400.windows.upload.speed=256000
+hublink_node.menu.UploadSpeed.230400=230400
+hublink_node.menu.UploadSpeed.230400.upload.speed=230400
+hublink_node.menu.UploadSpeed.460800.linux=460800
+hublink_node.menu.UploadSpeed.460800.macosx=460800
+hublink_node.menu.UploadSpeed.460800.upload.speed=460800
+hublink_node.menu.UploadSpeed.512000.windows=512000
+hublink_node.menu.UploadSpeed.512000.upload.speed=512000
+
+hublink_node.menu.DebugLevel.none=None
+hublink_node.menu.DebugLevel.none.build.code_debug=0
+hublink_node.menu.DebugLevel.error=Error
+hublink_node.menu.DebugLevel.error.build.code_debug=1
+hublink_node.menu.DebugLevel.warn=Warn
+hublink_node.menu.DebugLevel.warn.build.code_debug=2
+hublink_node.menu.DebugLevel.info=Info
+hublink_node.menu.DebugLevel.info.build.code_debug=3
+hublink_node.menu.DebugLevel.debug=Debug
+hublink_node.menu.DebugLevel.debug.build.code_debug=4
+hublink_node.menu.DebugLevel.verbose=Verbose
+hublink_node.menu.DebugLevel.verbose.build.code_debug=5
+
+hublink_node.menu.EraseFlash.none=Disabled
+hublink_node.menu.EraseFlash.none.upload.erase_cmd=
+hublink_node.menu.EraseFlash.all=Enabled
+hublink_node.menu.EraseFlash.all.upload.erase_cmd=-e
+
+hublink_node.menu.ZigbeeMode.default=Disabled
+hublink_node.menu.ZigbeeMode.default.build.zigbee_mode=
+hublink_node.menu.ZigbeeMode.default.build.zigbee_libs=
+hublink_node.menu.ZigbeeMode.zczr=Zigbee ZCZR (coordinator/router)
+hublink_node.menu.ZigbeeMode.zczr.build.zigbee_mode=-DZIGBEE_MODE_ZCZR
+hublink_node.menu.ZigbeeMode.zczr.build.zigbee_libs=-lesp_zb_api_zczr -lesp_zb_cli_command -lzboss_stack.zczr -lzboss_port

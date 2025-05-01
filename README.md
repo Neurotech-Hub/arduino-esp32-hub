@@ -1,4 +1,4 @@
-# Arduino ESP32 Hub
+# Neurotech Hub | esp32 Arduino Boards
 
 Custom variants and patches for the ESP32 Arduino core, maintained by Neurotech Hub.
 
@@ -12,7 +12,8 @@ Custom variants and patches for the ESP32 Arduino core, maintained by Neurotech 
 4. Install the package
 
 ### Development Setup
-1. Ensure cached versions of packages and package_*.json are deleted (e.g., `/Users/mattgaidica/Library/Arduino15`).
+
+1. Ensure cached versions of packages and package_*.json are deleted (e.g., `~/Library/Arduino15`).
 2. Restart Arduino IDE.
 3. Install the ESP32 Hub package from Boards Manager.
 
@@ -20,7 +21,7 @@ Custom variants and patches for the ESP32 Arduino core, maintained by Neurotech 
 
 ### Complete Workflow
 
-1. Initial setup (only needed once):
+1. Initial setup (only needed once). First, update the `ESP32_CORE_VERSION`.
    ```bash
    python3 tools/create_package.py setup
    ```
@@ -34,14 +35,14 @@ Custom variants and patches for the ESP32 Arduino core, maintained by Neurotech 
 3. Create patches:
    ```bash
    # Optional: clean existing patches
-   rm -rf patches/3.0.7/*.patch
+   rm -rf patches/3.x.x/*.patch
    
    # Create new patches
    python3 tools/create_package.py create-patches
    ```
-   This creates .patch files in `patches/3.0.7/` by comparing original and modified files
+   This creates .patch files in `patches/3.x.x/` by comparing original and modified files
 
-4. Update tools dependencies (if needed):
+4. Update tools dependencies (if needed). First, update the `CORE_VERSION`.
    ```bash
    # Install required Python package
    pip install requests
@@ -51,7 +52,7 @@ Custom variants and patches for the ESP32 Arduino core, maintained by Neurotech 
    ```
    This fetches and updates the toolsDependencies in package_esp32hub_index.json
 
-5. Build and release:
+5. Update the `package_esp32hub_.json` file with the updated `version`, `url`, `archiveFileName`, and additional boards (if needed). Build and release:
    ```bash
    python3 tools/create_package.py release
    ```
@@ -71,6 +72,9 @@ Custom variants and patches for the ESP32 Arduino core, maintained by Neurotech 
    - Publish release
 
 6. Verify:
+   ```bash
+   python3 tools/check_variants.py
+   ```
    - Check that all patches applied successfully
    - Test the package in Arduino IDE
    - Commit and push changes to GitHub

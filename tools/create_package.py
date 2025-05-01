@@ -12,7 +12,7 @@ import datetime
 import fnmatch
 import subprocess
 
-ESP32_CORE_VERSION = "3.0.7"
+ESP32_CORE_VERSION = "3.2.0"
 ESP32_CORE_URL = f"https://github.com/espressif/arduino-esp32/releases/download/{ESP32_CORE_VERSION}/esp32-{ESP32_CORE_VERSION}.zip"
 PATCH_DIR = f"../patches/{ESP32_CORE_VERSION}"
 PACKAGE_NAME = f"esp32-hub-{ESP32_CORE_VERSION}.zip"
