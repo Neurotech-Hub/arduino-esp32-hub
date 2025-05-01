@@ -701,7 +701,7 @@ adafruit_feather_esp32s3_nopsram.menu.ZigbeeMode.zczr.build.zigbee_libs=-lesp_zb
 ##############################################################
 # FED4 by Kravtiz Lab
 
-hublink_node.name=FED4
+fed4.name=FED4 by Kravitz Lab
 
 fed4.bootloader.tool=esptool_py
 fed4.bootloader.tool.default=esptool_py
