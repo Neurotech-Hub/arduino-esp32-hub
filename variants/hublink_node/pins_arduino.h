@@ -21,19 +21,19 @@ static const uint8_t RX = 38;
 
 static const uint8_t I2C_EN = 7;
 static const uint8_t AUX_IO0 = 1;
-static const uint8_t AUX_IO = 2;
-static const uint8_t MAG_OUT = 1;
+static const uint8_t AUX_IO1 = 2;
+static const uint8_t MAG_SENSOR = 1;
 static const uint8_t SD_EN = 45;
-static const uint8_t SD_CS = 46;
 static const uint8_t USB_SENSE = 34;
 static const uint8_t LED_BLUE = 33;
 static const uint8_t LED_RED = 13;
 static const uint8_t RTC_POWER = 41;
+static const uint8_t SHARED_INT = 21;
 
 static const uint8_t SDA = 3;
 static const uint8_t SCL = 4;
 
-static const uint8_t SS = 42;
+static const uint8_t SS = 46;
 static const uint8_t MOSI = 35;
 static const uint8_t SCK = 36;
 static const uint8_t MISO = 37;
