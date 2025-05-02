@@ -978,7 +978,7 @@ hublink_node.build.variant=hublink_node
 hublink_node.build.board=HUBLINK_NODE
 
 hublink_node.build.usb_mode=1
-hublink_node.build.cdc_on_boot=0
+hublink_node.build.cdc_on_boot=1
 hublink_node.build.msc_on_boot=0
 hublink_node.build.dfu_on_boot=0
 hublink_node.build.f_cpu=240000000L
